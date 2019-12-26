@@ -1,9 +1,18 @@
-import React from 'react'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import SignedInLinks from '../signed-in-links/SignedInLinks';
+import SignedOutLinks from './signed-out-links/SignedOutLinks';
 
-export const Navbar = () => {
+const Navbar = () => {
     return (
-        <div>
-            
-        </div>
+            <nav className="nav-wrapper grey darken-3">
+                <div className="container">
+                    <Link to="/" className="brand-logo">Project Info</Link>
+                    <SignedInLinks />
+                    <SignedOutLinks />
+                </div>
+            </nav>
     )
 }
+
+export default Navbar;
