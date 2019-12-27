@@ -1,21 +1,35 @@
 import  * as actionType  from "../actionTypes/actionTypes";
 import axios from 'axios';
 
-const createProject = () => {
+const createProject = (project) => {
    return {
-    type: actionType.CREATE_PROJECT
+    type: actionType.CREATE_PROJECT,
+    project
    }
 }
 
-const fetchUsers = () => {
+const createProjectError = (err) => {
+    return {
+        type: actionType.CREATE_PROJECT_ERROR,
+        err
+    }
+}
+
+export const dispatchCreateProject = (project, { getFirebase, getFirestore }) => {
+    console.log(project)
     return function(dispatch) {
-        axios.get('https://jsonplaceholder.typicode.com/users')
-            .then(response => {
-                const users = response.data.map(user => user.id)
-                dispatch(createProject(users))
-            })
-            .catch(error => {
-                dispatch(fetchUserFailure(error.message))
-            })
+        // make asyn call
+        const firestore = getFirestore();
+        firestore.collection('projects').add({
+            ...project,
+            authorFirstName: 'test',
+            authorLastName: 'test',
+            authorId: 12345,
+            createdAt: new Date()
+        }).then(() => {
+            dispatch(createProject(project))
+        }).catch((err) => {
+            dispatch(createProjectError(err))
+        })
     }
 }
